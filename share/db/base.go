@@ -1,4 +1,4 @@
-package db
+package sharedb
 
 import (
 	"github.com/google/uuid"
@@ -7,14 +7,13 @@ import (
 )
 
 type BaseModel struct {
-	ID        uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
+	ID        uuid.UUID `gorm:"type:uuid"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
 
-// TODO
-/*func (b *BaseModel) BeforeCreate(_ *gorm.DB) (err error) {
+func (b *BaseModel) BeforeCreate(_ *gorm.DB) (err error) {
 	b.ID = uuid.New()
 	return
-}*/
+}

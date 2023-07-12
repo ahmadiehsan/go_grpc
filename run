@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# ###############
+# App (the main application)
+# #####
+function app.migrate() {
+  go run cmd/db/migrate.go
+}
+
+# ###############
+# Run (should be at the end of the file)
+# #####
+eval "${1}" "${@:2}"

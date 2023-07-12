@@ -1,4 +1,4 @@
-module go_grpc
+module gogrpc
 
 go 1.20
 

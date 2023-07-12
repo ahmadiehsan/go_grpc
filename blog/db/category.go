@@ -1,10 +1,8 @@
-package db
+package blogdb
 
-import (
-	"go_grpc/share/db"
-)
+import sharedb "gogrpc/share/db"
 
 type Category struct {
-	db.BaseModel
+	sharedb.BaseModel
 	Name string
 }
