@@ -2,18 +2,19 @@ package main
 
 import (
 	log "github.com/sirupsen/logrus"
-	blogdb "gogrpc/blog/db"
-	sharedb "gogrpc/share/db"
+	"gogrpc/pkg/blog"
+	"gogrpc/pkg/db"
 )
 
 var models = []interface{}{
-	&blogdb.Article{},
-	&blogdb.Category{},
+	&blog.Article{},
+	&blog.Category{},
 }
 
 func main() {
-	db := sharedb.ConnectDB()
+	db := db.ConnectDB()
 	if err := db.AutoMigrate(models...); err != nil {
-		log.Error("Error in migration: ", err)
+		log.Fatal("Error in migration: ", err)
 	}
+	log.Infof("Done")
 }

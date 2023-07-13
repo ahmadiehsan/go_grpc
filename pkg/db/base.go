@@ -1,4 +1,4 @@
-package sharedb
+package db
 
 import (
 	"github.com/google/uuid"

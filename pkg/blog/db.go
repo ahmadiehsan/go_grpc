@@ -1,10 +1,15 @@
-package blogdb
+package blog
 
-import sharedb "gogrpc/share/db"
+import "gogrpc/pkg/db"
 
 type Article struct {
-	sharedb.BaseModel
+	db.BaseModel
 	Title      string
 	Content    string     `gorm:"type:text"`
 	Categories []Category `gorm:"many2many:article_categories;"`
+}
+
+type Category struct {
+	db.BaseModel
+	Name string
 }
