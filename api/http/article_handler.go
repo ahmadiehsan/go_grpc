@@ -13,7 +13,10 @@ func (s *Server) createArticle(c *fiber.Ctx) error {
 		return err
 	}
 
-	s.articleService.Create(a)
+	errCreate := s.articleService.Create(a)
+	if errCreate != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(errCreate.Error())
+	}
 
 	return c.JSON(a)
 }
@@ -34,7 +37,10 @@ func (s *Server) updateArticle(c *fiber.Ctx) error {
 		return errBody
 	}
 
-	s.articleService.Update(a)
+	errUpdate := s.articleService.Update(a)
+	if errUpdate != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(errUpdate.Error())
+	}
 
 	return c.JSON(a)
 }
@@ -45,7 +51,10 @@ func (s *Server) deleteArticle(c *fiber.Ctx) error {
 		return err
 	}
 
-	s.articleService.Delete(id)
+	errDelete := s.articleService.Delete(id)
+	if errDelete != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(errDelete.Error())
+	}
 
 	return c.Status(fiber.StatusNoContent).Send(nil)
 }
@@ -58,7 +67,7 @@ func (s *Server) getArticle(c *fiber.Ctx) error {
 
 	a, errGet := s.articleService.Get(id)
 	if errGet != nil {
-		return errGet
+		return c.Status(fiber.StatusNotFound).JSON(errGet.Error())
 	}
 
 	return c.JSON(a)
