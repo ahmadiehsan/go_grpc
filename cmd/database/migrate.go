@@ -1,9 +1,9 @@
 package main
 
 import (
+	"gogrpc/internal/database"
 	"gogrpc/internal/logger"
 	"gogrpc/pkg/blog"
-	"gogrpc/pkg/db"
 
 	"github.com/rs/zerolog/log"
 )
@@ -18,9 +18,14 @@ func init() {
 }
 
 func main() {
-	db := db.ConnectDB()
-	if err := db.AutoMigrate(models...); err != nil {
-		log.Fatal().Err(err).Msg("Error in migration")
+	db, err := database.Connect()
+	if err != nil {
+		log.Fatal().Err(err).Msg("Error in db connection")
 	}
+
+	if errMigrate := db.AutoMigrate(models...); errMigrate != nil {
+		log.Fatal().Err(errMigrate).Msg("Error in migration")
+	}
+
 	log.Info().Msg("Done")
 }

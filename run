@@ -17,7 +17,7 @@ function git.pre_commit.run_for_all() {
 # App (the main application)
 # #####
 function app.migrate() {
-  go run cmd/db/migrate.go
+  go run cmd/database/migrate.go
 }
 
 # ###############

@@ -1,16 +1,17 @@
 package blog
 
-import "gogrpc/pkg/db"
+import (
+	"gogrpc/internal/database"
+)
 
 type Article struct {
-	db.BaseModel
+	database.BaseModel
 	Title      string
-	Title1     string
 	Content    string     `gorm:"type:text"`
 	Categories []Category `gorm:"many2many:article_categories;"`
 }
 
 type Category struct {
-	db.BaseModel
+	database.BaseModel
 	Name string
 }
