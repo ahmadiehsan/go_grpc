@@ -20,6 +20,10 @@ function app.migrate() {
   go run cmd/database/migrate.go
 }
 
+function app.run_http() {
+  go run cmd/http/run.go
+}
+
 # ###############
 # Run (should be at the end of the file)
 # #####
