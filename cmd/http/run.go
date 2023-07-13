@@ -4,6 +4,7 @@ import (
 	"gogrpc/api/http"
 	"gogrpc/internal/database"
 	"gogrpc/internal/logger"
+	"gogrpc/pkg/blog"
 
 	"github.com/rs/zerolog/log"
 )
@@ -18,7 +19,8 @@ func main() {
 		log.Fatal().Err(err).Msg("Error in db connection")
 	}
 
-	server := http.NewServer(db)
+	as := &blog.ArticleService{DB: db}
+	server := http.NewServer(as)
 
 	errRun := server.Run()
 	if errRun != nil {

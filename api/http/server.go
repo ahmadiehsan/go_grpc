@@ -1,21 +1,22 @@
 package http
 
 import (
+	"gogrpc/pkg/blog"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"gorm.io/gorm"
 )
 
 type Server struct {
-	db  *gorm.DB
-	app *fiber.App
+	app            *fiber.App
+	articleService *blog.ArticleService
 }
 
-func NewServer(db *gorm.DB) *Server {
+func NewServer(as *blog.ArticleService) *Server {
 	app := fiber.New()
 	server := &Server{
-		db:  db,
-		app: app,
+		app:            app,
+		articleService: as,
 	}
 
 	server.setupMiddlewares()
@@ -29,9 +30,13 @@ func (s *Server) Run() error {
 }
 
 func (s *Server) setupRoutes() {
-	s.app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
+	api := s.app.Group("/api")
+
+	articles := api.Group("/v1/articles")
+	articles.Post("", s.createArticle)
+	articles.Put("/:id", s.updateArticle)
+	articles.Get("/:id", s.getArticle)
+	articles.Delete("/:id", s.deleteArticle)
 }
 
 func (s *Server) setupMiddlewares() {

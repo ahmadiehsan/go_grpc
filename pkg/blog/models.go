@@ -6,12 +6,12 @@ import (
 
 type Article struct {
 	database.BaseModel
-	Title      string
-	Content    string     `gorm:"type:text"`
-	Categories []Category `gorm:"many2many:article_categories;"`
+	Title      string     `json:"title"`
+	Content    string     `gorm:"type:text" json:"content"`
+	Categories []Category `gorm:"many2many:article_categories" json:"categories"`
 }
 
 type Category struct {
 	database.BaseModel
-	Name string
+	Name string `json:"name"`
 }
