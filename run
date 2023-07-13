@@ -1,6 +1,19 @@
 #!/bin/bash
 
 # ###############
+# Git
+# #####
+function git.pre_commit.init() {
+  pre-commit install
+  pre-commit install --hook-type pre-push
+  pre-commit install --hook-type commit-msg
+}
+
+function git.pre_commit.run_for_all() {
+  pre-commit run --all-files;
+}
+
+# ###############
 # App (the main application)
 # #####
 function app.migrate() {

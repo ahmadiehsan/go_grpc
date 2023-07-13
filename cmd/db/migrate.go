@@ -1,9 +1,11 @@
 package main
 
 import (
-	log "github.com/sirupsen/logrus"
+	"gogrpc/internal/logger"
 	"gogrpc/pkg/blog"
 	"gogrpc/pkg/db"
+
+	"github.com/rs/zerolog/log"
 )
 
 var models = []interface{}{
@@ -11,10 +13,14 @@ var models = []interface{}{
 	&blog.Category{},
 }
 
+func init() {
+	logger.SwitchToHumanReadableMode()
+}
+
 func main() {
 	db := db.ConnectDB()
 	if err := db.AutoMigrate(models...); err != nil {
-		log.Fatal("Error in migration: ", err)
+		log.Fatal().Err(err).Msg("Error in migration")
 	}
-	log.Infof("Done")
+	log.Info().Msg("Done")
 }
