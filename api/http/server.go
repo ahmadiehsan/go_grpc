@@ -1,20 +1,23 @@
 package http
 
 import (
-	"gogrpc/pkg/blog"
+	"gogrpc/internal/blog"
+	"gogrpc/internal/conf"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 type Server struct {
+	settings       conf.Settings
 	app            *fiber.App
 	articleService *blog.ArticleService
 }
 
-func NewServer(as *blog.ArticleService) *Server {
+func NewServer(settings conf.Settings, as *blog.ArticleService) *Server {
 	app := fiber.New()
 	server := &Server{
+		settings:       settings,
 		app:            app,
 		articleService: as,
 	}
@@ -26,7 +29,7 @@ func NewServer(as *blog.ArticleService) *Server {
 }
 
 func (s *Server) Run() error {
-	return s.app.Listen(":3000") // TODO read the port from the env
+	return s.app.Listen(s.settings.HTTPPort)
 }
 
 func (s *Server) setupRoutes() {

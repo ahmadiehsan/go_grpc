@@ -2,28 +2,26 @@ package main
 
 import (
 	"gogrpc/api/http"
+	"gogrpc/internal/blog"
+	"gogrpc/internal/conf"
 	"gogrpc/internal/database"
 	"gogrpc/internal/logger"
-	"gogrpc/pkg/blog"
 
 	"github.com/rs/zerolog/log"
 )
 
-func init() {
-	logger.SwitchToHumanReadableMode()
-}
-
 func main() {
-	db, err := database.Connect()
-	if err != nil {
-		log.Fatal().Err(err).Msg("Error in db connection")
+	settings := conf.LoadSettings()
+	if settings.Debug {
+		logger.SwitchToHumanReadableMode()
 	}
 
+	db := database.Connect(settings)
 	as := &blog.ArticleService{DB: db}
-	server := http.NewServer(as)
+	server := http.NewServer(settings, as)
 
-	errRun := server.Run()
-	if errRun != nil {
-		log.Fatal().Err(errRun).Msg("Failed to run server")
+	err := server.Run()
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to run server")
 	}
 }

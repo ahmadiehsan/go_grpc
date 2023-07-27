@@ -1,3 +1,7 @@
+# For this project
+*.env
+!*.example.env
+
 # IntelliJ project files
 .idea
 *.iml

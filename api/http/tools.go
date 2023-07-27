@@ -5,14 +5,16 @@ import (
 	"github.com/google/uuid"
 )
 
-func getIDFromURL(c *fiber.Ctx) (uuid.UUID, error) {
+func getIDFromURL(c *fiber.Ctx) (id uuid.UUID, err error) {
 	params := struct {
 		id uuid.UUID `params:"id"`
 	}{}
-	err := c.ParamsParser(&params)
+
+	err = c.ParamsParser(&params)
 	if err != nil {
-		return uuid.Nil, err
+		return
 	}
 
-	return params.id, nil
+	id = params.id
+	return
 }

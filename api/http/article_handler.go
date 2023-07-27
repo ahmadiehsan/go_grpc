@@ -1,7 +1,7 @@
 package http
 
 import (
-	"gogrpc/pkg/blog"
+	"gogrpc/internal/blog"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -13,9 +13,9 @@ func (s *Server) createArticle(c *fiber.Ctx) error {
 		return err
 	}
 
-	errCreate := s.articleService.Create(a)
-	if errCreate != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(errCreate.Error())
+	err = s.articleService.Create(a)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(err.Error())
 	}
 
 	return c.JSON(a)
@@ -27,19 +27,19 @@ func (s *Server) updateArticle(c *fiber.Ctx) error {
 		return err
 	}
 
-	a, errGet := s.articleService.Get(id) // TODO handle partial update also
-	if errGet != nil {
-		return errGet
+	a, err := s.articleService.Get(id) // TODO handle partial update also
+	if err != nil {
+		return err
 	}
 
-	errBody := c.BodyParser(a)
-	if errBody != nil {
-		return errBody
+	err = c.BodyParser(a)
+	if err != nil {
+		return err
 	}
 
-	errUpdate := s.articleService.Update(a)
-	if errUpdate != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(errUpdate.Error())
+	err = s.articleService.Update(a)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(err.Error())
 	}
 
 	return c.JSON(a)
@@ -51,9 +51,9 @@ func (s *Server) deleteArticle(c *fiber.Ctx) error {
 		return err
 	}
 
-	errDelete := s.articleService.Delete(id)
-	if errDelete != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(errDelete.Error())
+	err = s.articleService.Delete(id)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(err.Error())
 	}
 
 	return c.Status(fiber.StatusNoContent).Send(nil)
@@ -65,9 +65,9 @@ func (s *Server) getArticle(c *fiber.Ctx) error {
 		return err
 	}
 
-	a, errGet := s.articleService.Get(id)
-	if errGet != nil {
-		return c.Status(fiber.StatusNotFound).JSON(errGet.Error())
+	a, err := s.articleService.Get(id)
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(err.Error())
 	}
 
 	return c.JSON(a)
